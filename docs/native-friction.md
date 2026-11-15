@@ -1,6 +1,6 @@
 # Native friction
 
-Framework and host gaps found while building Library's Mac app. Each entry says
+Framework and host gaps found while building the Notes Mac app. Each entry says
 what was tried and what happened, so it can be fixed at the source.
 
 ## Screens
@@ -26,7 +26,7 @@ what was tried and what happened, so it can be fixed at the source.
 - **The CSRF token `createApi` keeps goes stale after a sign-out** (`api.ts` seeds it
   once; signing out rotates the cookie, and the server mints a new one only for a
   request without one). Signing in again then got 403 Forbidden. The native
-  transport (`native-library.ts`) now remembers the latest token any response set and
+  transport (`native-app.ts`) now remembers the latest token any response set and
   uses it for posts made before sign-in; the shared client would be the better home.
 
 ### Fixed in the host (verified)
@@ -118,7 +118,34 @@ where it was fixed (the fix is at the source, never in this app).
   `index.html` and `craft.json`, and a `--benchmark` run. Fixed: a bundle with
   `native-screen.js` and `craft-app.json` is a valid native app, checked with `--version`.
 
+Round four (the rename to Notes, Settings and in-app updates), each fixed at the source:
+
+- **The shared Button drew a phone button on the Mac** (stx 0.2.889). A reactive `:title` was
+  read at compile time and lost, so Sign In was a blank blue bar and a ghost button did not draw.
+  Fixed: on macOS the shared Button is the AppKit push button again, with reactive bindings.
+- **The Settings components were web only** (stx). Fixed: `SettingsWindow` and its pieces,
+  `AppearancePicker` and a new `SettingsUpdateRow` draw on the AppKit host from the same tags.
+- **No in-app updates for an AppKit app** (craft, stacks). Fixed: `craft.updater` in the host
+  (signed manifest, checksum, signature and team checks, bundle swap, relaunch), `macos.updates`,
+  a Developer ID distribution and `buddy release:desktop` for a `macos` app.
+- **The sidebar could not match Things** (craft, stx). Fixed: `labelFontWeight`,
+  `selectionInset`, `contentInset`; headers no longer float (a hairline under the title bar); a
+  selected row keeps its colours (it was white on a pale pill in the light appearance).
+- **A note's title read `# Title`** (craft). Fixed: a heading's marks fold away off the caret line.
+- **Signing in after a sign-out in Settings answered Forbidden** (craft, stx). Windows share one
+  cookie store, which replaced the Cookie header a request set. Fixed: `fetch` takes
+  `credentials: 'omit'`, which the Mac app's API client uses for every request.
+- **Web menus never closed on an outside click** (stx). `useClickOutside` threw on a getter. Fixed.
+- **The test driver's key command did nothing** (craft): it was shadowed by `onKeyPress`. Fixed.
+- **Pantry's registry publish needed a `dist/` folder** (pantry). Fixed.
+
 Still open:
+
+- A Stacks app has nowhere to put Pantry's `native` release settings: they live in `pantry.json`,
+  and once that file exists Pantry stops reading `deps.yaml`, so the app's system dependencies
+  drop out of the lockfile.
+- The AppKit host has no Slider, segmented control or determinate progress bar; the update row
+  shows its progress as text.
 
 - `config/desktop.ts` has no `menus` or `sidebar` section: menus are set by the screen
   with `craft.desktop.setMenus`, and the sidebar is the `NativeSidebar` primitive. A

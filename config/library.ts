@@ -8,7 +8,7 @@ import type { LibraryConfig } from '@stacksjs/types'
  * have any questions, feel free to reach out via Discord or GitHub Discussions.
  */
 export default {
-  name: 'library',
+  name: 'notes',
   // The npm scope your packages publish under, e.g. 'your-org'. Set it before
   // `buddy libs:publish`; the @ prefix is added automatically.
   owner: null,
@@ -18,7 +18,10 @@ export default {
   author: '',
   contributors: [],
   defaultLanguage: 'en',
-  releaseable: true,
+  // Notes is an application: `buddy release` bumps, tags and pushes it, and
+  // publishes no npm packages. Turn this on (and set `repository`) to publish
+  // the packages below.
+  releaseable: false,
 
   /**
    * One `resources/` tree, any number of npm packages.
@@ -31,7 +34,7 @@ export default {
    */
   packages: [
     {
-      name: 'library-fx',
+      name: 'notes-fx',
       kind: 'functions',
       description: 'Your function library description.',
       keywords: ['functions', 'composables', 'library', 'typescript', 'javascript'],
@@ -44,20 +47,20 @@ export default {
     },
 
     {
-      name: 'library-components',
+      name: 'notes-components',
       kind: 'components',
       description: 'Your STX component library, as tree-shakeable modules.',
       keywords: ['components', 'custom-elements', 'stx', 'library', 'typescript'],
-      prefix: 'library',
+      prefix: 'notes',
       include: ['*.stx'],
     },
 
     {
-      name: 'library-elements',
+      name: 'notes-elements',
       kind: 'web-components',
       description: 'Your framework agnostic web component library description.',
       keywords: ['custom-elements', 'web-components', 'library', 'framework-agnostic', 'typescript', 'javascript'],
-      prefix: 'library',
+      prefix: 'notes',
       include: ['*.stx'],
     },
   ],

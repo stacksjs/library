@@ -1,5 +1,5 @@
 /**
- * Library's API client, shared by the web app and the native Mac app.
+ * Notes' API client, shared by the web app and the native Mac app.
  *
  * One module owns every request so the two clients cannot drift: the shapes in
  * `types.ts`, the CSRF handshake for unauthenticated posts, the bearer token
@@ -22,7 +22,7 @@ export class ApiError extends Error {
 }
 
 export interface ApiOptions {
-  /** Origin of the Library server, e.g. `https://library.stacksjs.com`. Empty for same-origin web. */
+  /** Origin of the Notes server, e.g. `https://library.stacksjs.com`. Empty for same-origin web. */
   base?: string
   session: Session
   fetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
@@ -49,15 +49,24 @@ export function createApi(options: ApiOptions) {
   }
 
   async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
-    const headers: Record<string, string> = { accept: 'application/json' }
-    if (body !== undefined) headers['content-type'] = 'application/json'
     const token = options.session.token()
-    if (token) headers.authorization = `Bearer ${token}`
-    else if (method !== 'GET') {
-      await seedCsrf()
-      if (csrf) { headers['x-csrf-token'] = csrf; headers.cookie = `X-CSRF-Token=${csrf}` }
+    const send = async (): Promise<Response> => {
+      const headers: Record<string, string> = { accept: 'application/json' }
+      if (body !== undefined) headers['content-type'] = 'application/json'
+      if (token) headers.authorization = `Bearer ${token}`
+      else if (method !== 'GET') {
+        await seedCsrf()
+        if (csrf) { headers['x-csrf-token'] = csrf; headers.cookie = `X-CSRF-Token=${csrf}` }
+      }
+      return http(`${base}${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) })
     }
-    const res = await http(`${base}${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) })
+    let res = await send()
+    // A CSRF token is kept for the life of the page, and the server's can change under it (it expires, and
+    // signing out rotates it). A refused post made without a session asks for a fresh token and goes once more.
+    if (res.status === 403 && !token && method !== 'GET' && csrf) {
+      csrf = ''
+      res = await send()
+    }
     const text = await res.text()
     let json: unknown = null
     try { json = text ? JSON.parse(text) : null } catch { json = text }

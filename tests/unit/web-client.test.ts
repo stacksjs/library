@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
-import { pagedUrl } from '../../resources/functions/library/client'
-import { webSession } from '../../resources/functions/library/session'
+import { createApi } from '../../resources/functions/notes/api'
+import { pagedUrl } from '../../resources/functions/notes/client'
+import { webSession } from '../../resources/functions/notes/session'
 
 describe('client', () => {
   it('asks the paginated index routes for everything', () => {
@@ -28,5 +29,38 @@ describe('client', () => {
     expect(webSession(storage).token()).toBe('tok')
     webSession(storage).save(null)
     expect(webSession(storage).token()).toBeNull()
+  })
+
+  it('asks for a fresh CSRF token once when a sign-in is refused', async () => {
+    // The server's token changed after the client read one (it expired, or another window signed out).
+    let minted = 0
+    let current = ''
+    const seen: string[] = []
+    const http = (async (input: string, init?: RequestInit) => {
+      const headers = (init?.headers ?? {}) as Record<string, string>
+      if (String(input).endsWith('/me')) {
+        current = `${++minted}`.padStart(8, 'a')
+        return new Response('{}', { status: 401, headers: { 'set-cookie': `X-CSRF-Token=${current}; Path=/` } })
+      }
+      seen.push(headers['x-csrf-token'] ?? '')
+      // What the client read first is stale by the time it posts.
+      if (seen.length === 1) { current = 'stale-on-the-server'; return new Response('{"error":"Forbidden"}', { status: 403 }) }
+      return headers['x-csrf-token'] === current && headers.cookie === `X-CSRF-Token=${current}`
+        ? new Response('{"token":"t","user":{"id":1}}', { status: 200 })
+        : new Response('{"error":"Forbidden"}', { status: 403 })
+    }) as unknown as typeof fetch
+    let saved: string | null = null
+    const api = createApi({ base: 'https://notes.test', fetch: http, session: { token: () => saved, save: (token) => { saved = token } } })
+    await api.signIn('a@notes.test', 'password-1')
+    expect(seen).toEqual(['aaaaaaa1', 'aaaaaaa2'])
+    expect(saved).toBe('t')
+  })
+
+  it('reports a refusal that a fresh token does not cure', async () => {
+    const http = (async (input: string) => String(input).endsWith('/me')
+      ? new Response('{}', { status: 401, headers: { 'set-cookie': 'X-CSRF-Token=abcdef01; Path=/' } })
+      : new Response('{"error":"Forbidden"}', { status: 403 })) as unknown as typeof fetch
+    const api = createApi({ base: 'https://notes.test', fetch: http, session: { token: () => null, save: () => {} } })
+    await expect(api.signIn('a@notes.test', 'password-1')).rejects.toThrow('Forbidden')
   })
 })
