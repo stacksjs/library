@@ -3,7 +3,7 @@ interface LibraryEditSheetProps { open?: boolean }
 const { open = false } = defineProps<LibraryEditSheetProps>()
 </script>
 <script client>
-  import { libraryColor, libraryIcon } from '../functions/library/promptview'
+  import { libraryColor, libraryIcon } from '../functions/notes/promptview'
   const lsOpen = useReactiveProp('open', false)
   const lsEmit = defineEmits()
   const lsPrompts = useStore('prompts')

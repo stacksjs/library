@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { allTags, groupLogbook, counts, moveId, newTodoFor, normalizeTodo, orderChanges, parseTagInput, progress, serializeChanges, splitToday, viewItems, whenLabel, whenPatch } from '../../resources/functions/library/todos'
-import type { Todo } from '../../resources/functions/library/types'
+import { allTags, groupLogbook, counts, moveId, newTodoFor, normalizeTodo, orderChanges, parseTagInput, progress, serializeChanges, splitToday, viewItems, whenLabel, whenPatch } from '../../resources/functions/notes/todos'
+import type { Todo } from '../../resources/functions/notes/types'
 
 const today = '2026-10-30'
 let next = 1

@@ -1,9 +1,9 @@
 {
-  "name": "library",
+  "name": "notes",
   "type": "module",
   "version": "0.0.0",
   "private": true,
-  "description": "Library",
+  "description": "Notes, to-dos and shareable prompts, on the web and as a native Mac app.",
   "engines": {
     "bun": "1.4.4"
   },
@@ -41,7 +41,9 @@
     "release:calendar": "./buddy release --bump calendar",
     "release:minor": "./buddy release --bump minor",
     "release:major": "./buddy release --bump major",
-    "release:testflight": "APP_ENV=production ./buddy desktop:apple:publish --build-number next --testflight 'Library Team'",
+    "release:mac": "APP_ENV=production ./buddy release:desktop",
+    "release:mac:dry-run": "APP_ENV=production ./buddy release:desktop --dry-run",
+    "release:testflight": "APP_ENV=production ./buddy desktop:apple:publish --build-number next --testflight 'Notes Team'",
     "release:testflight:validate": "APP_ENV=production ./buddy desktop:apple:publish --build-number next --validate-only",
     "changelog": "./buddy changelog",
     "generate": "./buddy generate",

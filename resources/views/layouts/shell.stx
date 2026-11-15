@@ -8,12 +8,12 @@ useHead({
 })
 </script>
 @appearanceBootstrap({
-  storageKey: 'library-appearance',
+  storageKey: 'notes-appearance',
   colorMode: { key: 'colorMode', attribute: 'color-mode', default: 'system' },
 })
 <style>
   /*
-   * Library's design tokens. Two themes (light, dark), one accent, one radius
+   * Notes' design tokens. Two themes (light, dark), one accent, one radius
    * scale: 10px for controls and rows, 16px for sheets, full for circles and chips.
    * Text pairs are AA on their surfaces; the accent button's ink flips in dark mode
    * because white on the lighter dark-mode blue would not be.

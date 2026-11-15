@@ -1,6 +1,6 @@
 import { defineStore, state } from '@stacksjs/stx'
-import { pickCompleter } from '../functions/library/complete'
-import { createGhost, type CompletionKind } from '../functions/library/ghost'
+import { pickCompleter } from '../functions/notes/complete'
+import { createGhost, type CompletionKind } from '../functions/notes/ghost'
 
 /**
  * The one ghost-text controller the editors share (only one field has the caret

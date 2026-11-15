@@ -1,5 +1,6 @@
-// The Library app icon: a deep indigo squircle with three books on a shelf, the
-// last one leaning. Drawn with CoreGraphics so the 1024 pixel master is made by
+// The Notes app icon: a deep blue squircle holding a sheet of paper with a
+// turned corner, a ticked to-do on its first line and plain lines of writing
+// below. Drawn with CoreGraphics so the 1024 pixel master is made by
 // a script and can be changed by editing numbers, not a design file.
 //
 //   swift scripts/make-app-icon.swift resources/native/icon/AppIcon-1024.png
@@ -35,38 +36,64 @@ let sheen = CGGradient(colorsSpace: space, colors: [color(0xffffff, 0.22), color
 context.drawLinearGradient(sheen, start: CGPoint(x: 512, y: 924), end: CGPoint(x: 512, y: 640), options: [])
 context.restoreGState()
 
-// The shelf.
-let shelfY: CGFloat = 318
-let shelf = CGRect(x: 214, y: shelfY - 26, width: 596, height: 26)
-context.addPath(CGPath(roundedRect: shelf, cornerWidth: 13, cornerHeight: 13, transform: nil))
-context.setFillColor(color(0xffffff, 0.92)); context.fillPath()
+// The sheet: white paper, a little taller than wide, with its top right corner turned down.
+let sheet = CGRect(x: 276, y: 232, width: 472, height: 560)
+let fold: CGFloat = 132
+let corner: CGFloat = 44
+let paper = CGMutablePath()
+paper.move(to: CGPoint(x: sheet.minX + corner, y: sheet.minY))
+paper.addLine(to: CGPoint(x: sheet.maxX - corner, y: sheet.minY))
+paper.addArc(tangent1End: CGPoint(x: sheet.maxX, y: sheet.minY), tangent2End: CGPoint(x: sheet.maxX, y: sheet.minY + corner), radius: corner)
+paper.addLine(to: CGPoint(x: sheet.maxX, y: sheet.maxY - fold))
+paper.addLine(to: CGPoint(x: sheet.maxX - fold, y: sheet.maxY))
+paper.addLine(to: CGPoint(x: sheet.minX + corner, y: sheet.maxY))
+paper.addArc(tangent1End: CGPoint(x: sheet.minX, y: sheet.maxY), tangent2End: CGPoint(x: sheet.minX, y: sheet.maxY - corner), radius: corner)
+paper.addLine(to: CGPoint(x: sheet.minX, y: sheet.minY + corner))
+paper.addArc(tangent1End: CGPoint(x: sheet.minX, y: sheet.minY), tangent2End: CGPoint(x: sheet.minX + corner, y: sheet.minY), radius: corner)
+paper.closeSubpath()
 
-// Books: x, width, height, fill.
-let books: [(CGFloat, CGFloat, CGFloat, UInt32)] = [
-    (238, 116, 372, 0xffffff),
-    (372, 100, 432, 0xdfe6ff),
-    (490, 124, 336, 0xb7c4ff),
-]
-for (x, width, height, fill) in books {
-    let rect = CGRect(x: x, y: shelfY, width: width, height: height)
-    context.addPath(CGPath(roundedRect: rect, cornerWidth: 14, cornerHeight: 14, transform: nil))
-    context.setFillColor(color(fill, 0.97)); context.fillPath()
-    // Two spine bands.
-    for fraction in [0.78, 0.7] as [CGFloat] {
-        context.setFillColor(color(0x24349a, 0.28))
-        context.fill(CGRect(x: x, y: shelfY + height * fraction, width: width, height: 9))
-    }
-}
-
-// The last book leans against the others.
 context.saveGState()
-context.translateBy(x: 664, y: shelfY)
-context.rotate(by: -0.2)
-let leaning = CGRect(x: 0, y: 0, width: 108, height: 388)
-context.addPath(CGPath(roundedRect: leaning, cornerWidth: 14, cornerHeight: 14, transform: nil))
-context.setFillColor(color(0x8fa3ff, 0.98)); context.fillPath()
-context.setFillColor(color(0x24349a, 0.28)); context.fill(CGRect(x: 0, y: 388 * 0.78, width: 108, height: 9))
+context.setShadow(offset: CGSize(width: 0, height: -18), blur: 36, color: color(0x0b1240, 0.42))
+context.addPath(paper); context.setFillColor(color(0xffffff)); context.fillPath()
 context.restoreGState()
+
+// A hint of shading down the page, so it reads as paper and not a cut-out.
+context.saveGState()
+context.addPath(paper); context.clip()
+let page = CGGradient(colorsSpace: space, colors: [color(0xffffff), color(0xe9eeff)] as CFArray, locations: [0, 1])!
+context.drawLinearGradient(page, start: CGPoint(x: 512, y: sheet.maxY), end: CGPoint(x: 512, y: sheet.minY), options: [])
+context.restoreGState()
+
+// The turned corner: the back of the page, a shade darker, with a rounded tip.
+let flap = CGMutablePath()
+flap.move(to: CGPoint(x: sheet.maxX - fold, y: sheet.maxY))
+flap.addLine(to: CGPoint(x: sheet.maxX - fold, y: sheet.maxY - fold + 30))
+flap.addArc(tangent1End: CGPoint(x: sheet.maxX - fold, y: sheet.maxY - fold), tangent2End: CGPoint(x: sheet.maxX - fold + 30, y: sheet.maxY - fold), radius: 30)
+flap.addLine(to: CGPoint(x: sheet.maxX, y: sheet.maxY - fold))
+flap.closeSubpath()
+context.saveGState()
+context.setShadow(offset: CGSize(width: -6, height: -8), blur: 16, color: color(0x0b1240, 0.22))
+context.addPath(flap); context.setFillColor(color(0xc3cfff)); context.fillPath()
+context.restoreGState()
+
+// First line: a ticked to-do. A filled circle in the tile's blue with a white check.
+let tick = CGRect(x: 332, y: 604, width: 84, height: 84)
+context.addEllipse(in: tick); context.setFillColor(color(0x3a57e8)); context.fillPath()
+context.setStrokeColor(color(0xffffff)); context.setLineWidth(13); context.setLineCap(.round); context.setLineJoin(.round)
+context.move(to: CGPoint(x: tick.minX + 23, y: tick.midY - 1))
+context.addLine(to: CGPoint(x: tick.minX + 37, y: tick.midY - 15))
+context.addLine(to: CGPoint(x: tick.minX + 62, y: tick.midY + 14))
+context.strokePath()
+
+// Writing: the title beside the tick, then three lines of body, the last one short.
+func line(_ x: CGFloat, _ y: CGFloat, _ width: CGFloat, _ height: CGFloat, _ fill: CGColor) {
+    context.addPath(CGPath(roundedRect: CGRect(x: x, y: y, width: width, height: height), cornerWidth: height / 2, cornerHeight: height / 2, transform: nil))
+    context.setFillColor(fill); context.fillPath()
+}
+line(446, 632, 156, 28, color(0x1c2a78))
+line(332, 508, 360, 22, color(0x1c2a78, 0.30))
+line(332, 432, 360, 22, color(0x1c2a78, 0.30))
+line(332, 356, 216, 22, color(0x1c2a78, 0.30))
 
 guard let image = context.makeImage() else { fatalError("no image") }
 let rep = NSBitmapImageRep(cgImage: image)

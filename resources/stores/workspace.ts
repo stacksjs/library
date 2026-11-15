@@ -1,8 +1,8 @@
 import { defineStore, derived, state, useStore } from '@stacksjs/stx'
-import { api, renameNoteFolder } from '../functions/library/client'
-import { formatRoute, HOME, panelFor, parentOf, parseRoute, type Route, withItem } from '../functions/library/router'
-import type { Area, LibraryList, NoteFolder, Project, SidebarData } from '../functions/library/types'
-import type { View } from '../functions/library/todos'
+import { api, renameNoteFolder } from '../functions/notes/client'
+import { formatRoute, HOME, panelFor, parentOf, parseRoute, type Route, withItem } from '../functions/notes/router'
+import type { Area, LibraryList, NoteFolder, Project, SidebarData } from '../functions/notes/types'
+import type { View } from '../functions/notes/todos'
 
 /** What this store reads off its siblings; `useStore` hands back the store typed as unknown. */
 interface TasksStore { today: () => string, load: () => Promise<void> }

@@ -1,10 +1,10 @@
 @extends('shell')
 @section('content')
 <script server>
-useHead({ title: 'Delete your account - Library' })
+useHead({ title: 'Delete your account - Notes' })
 </script>
 <script client>
-  import { api, session, go } from '../functions/library/client'
+  import { api, session, go } from '../functions/notes/client'
 
   const daEmail = state('')
   const daError = state('')
@@ -32,7 +32,7 @@ useHead({ title: 'Delete your account - Library' })
 
     <div :if="daDone()">
       <p class="k-sub" style="font-size: 15px">Your account and everything in it were deleted.</p>
-      <p><a href="/" style="color: var(--accent-text); font-weight: 600">Back to Library</a></p>
+      <p><a href="/" style="color: var(--accent-text); font-weight: 600">Back to Notes</a></p>
     </div>
 
     <div :if="!daDone()">

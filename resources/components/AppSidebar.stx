@@ -1,6 +1,6 @@
 <script client>
-  import { libraryColor, libraryIcon } from '../functions/library/promptview'
-  import { initials } from '../functions/library/format'
+  import { libraryColor, libraryIcon } from '../functions/notes/promptview'
+  import { initials } from '../functions/notes/format'
 
   const sbWs = useStore('workspace')
   const sbTasks = useStore('tasks')
@@ -69,7 +69,7 @@
 </script>
 
 <div class="k-pane k-side" style="flex: 1">
-  <nav class="k-scroll" aria-label="Library">
+  <nav class="k-scroll" aria-label="Lists">
     <div class="k-nav" style="padding-top: 18px">
       <div :for="group in [sbTop, sbMiddle, sbLog]" :key="group[0].name">
         <button type="button" class="k-nav-item" :for="item in group" :key="item.name" :aria-current="sbSection() === 'todos' && sbIsList(item.name) ? 'page' : null" @click="sbList(item.name)">

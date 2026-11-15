@@ -1,11 +1,11 @@
 <script client>
-import { today as deviceDay } from '../functions/library/api'
-import { toggleCheckLine } from '../functions/library/markdown'
-import { apiOrigin, desktop, keychainSession, nativeApi, nativeCraft, palette, readCache, requestCompletion, saveAccount, savedAccount, writeCache } from '../functions/library/native-library'
-import { acceptCompletionAt, checkLines, eventSelection, ghostAt, COMPLETION_DELAY, completionRequest, eventText, eventValue, fillPrompt, findLibrary, formatNote, isOfflineError, navId, navTitle, NEW_PROMPT_BODY, noteDateGroups, noteSnippet, noteStamp, noteTagCounts, notesIn, parseDayField, parseNav, projectProgress, promptVariables, splitBlocks, blockHeader, quickEntry, REPEATS, resolveDay, rowMarks, shareLink, SMART_LISTS, sidebarSections, todoBlocks, whenChip } from '../functions/library/native-model'
-import { daysLeft, normalizeNote } from '../functions/library/notes'
-import { filterPrompts, normalizePrompt } from '../functions/library/promptview'
-import { counts, normalizeTodo, parseTagInput, serializeChanges, whenPatch } from '../functions/library/todos'
+import { today as deviceDay } from '../functions/notes/api'
+import { toggleCheckLine } from '../functions/notes/markdown'
+import { apiOrigin, desktop, keychainSession, nativeApi, nativeCraft, palette, readCache, requestCompletion, saveAccount, savedAccount, writeCache } from '../functions/notes/native-app'
+import { acceptCompletionAt, checkLines, eventSelection, ghostAt, COMPLETION_DELAY, completionRequest, eventText, eventValue, fillPrompt, findLibrary, formatNote, isOfflineError, navId, navTitle, NEW_PROMPT_BODY, noteDateGroups, noteSnippet, noteStamp, noteTagCounts, notesIn, parseDayField, parseNav, projectProgress, promptVariables, splitBlocks, blockHeader, quickEntry, REPEATS, resolveDay, rowMarks, shareLink, SMART_LISTS, sidebarSections, todoBlocks, whenChip } from '../functions/notes/native-model'
+import { daysLeft, normalizeNote } from '../functions/notes/notes'
+import { filterPrompts, normalizePrompt } from '../functions/notes/promptview'
+import { counts, normalizeTodo, parseTagInput, serializeChanges, whenPatch } from '../functions/notes/todos'
 
 const session = keychainSession()
 const api = nativeApi(session, () => signedOutHere())
@@ -221,7 +221,7 @@ async function signInWith(form) {
     startSession(user)
   }
   catch (error) {
-    authError.set(isOfflineError(error) ? 'Library cannot reach the server. Check your connection and try again.' : (error?.message || 'Those details did not work.'))
+    authError.set(isOfflineError(error) ? 'Notes cannot reach the server. Check your connection and try again.' : (error?.message || 'Those details did not work.'))
   }
   finally { authBusy.set(false) }
 }
@@ -256,7 +256,7 @@ async function signOut() {
 }
 
 function openSettings() {
-  desktop().openWindow({ name: 'settings', route: 'Settings', title: 'Settings', width: 520, height: 420, minWidth: 460, minHeight: 360 })
+  desktop().openWindow({ name: 'settings', route: 'Settings', title: 'Settings', width: 720, height: 540, minWidth: 620, minHeight: 420, titlebarStyle: 'transparent' })
 }
 
 // Navigation
@@ -1041,10 +1041,11 @@ onMount(async () => {
 </script>
 
 <View class="flex-1 flex-row" testID="main-shell">
-  <LibraryMacSignIn :if="!signedIn()" class="flex-1" :error="authError()" :busy="authBusy()" :origin="apiOrigin()" :epoch="signOuts()" @submit="signInWith($event)" />
+  <NotesMacSignIn :if="!signedIn()" class="flex-1" :error="authError()" :busy="authBusy()" :origin="apiOrigin()" :epoch="signOuts()" @submit="signInWith($event)" />
 
   <View :if="signedIn()" class="flex-col shrink-0 w-[240px] border-r" style="border-color: separator" material="sidebar" testID="sidebar-pane">
-    <NativeSidebar class="flex-1" rowHeight="24" labelFontSize="15" :sections="sections()" :selected="selectedNav()" @change="pickNav(eventValue($event))" testID="sidebar" />
+    <View class="h-[44px]" />
+    <NativeSidebar class="flex-1" rowHeight="24" labelFontSize="14" labelFontWeight="semibold" selectionInset="12" contentInset="7" :sections="sections()" :selected="selectedNav()" @change="pickNav(eventValue($event))" testID="sidebar" />
     <View class="flex-row items-center px-[12px] h-[40px] border-t" style="border-color: separator">
       <Button title="New List" symbol="plus" variant="ghost" class="text-[13px]" style="color: secondaryLabel" testID="new-list" @click="newList()" />
       <View class="flex-1" />
@@ -1128,16 +1129,16 @@ onMount(async () => {
           </View>
           <View :if="showDate()" class="flex-row gap-[8px] items-center pl-[19px] h-[26px]">
             <Icon symbol="calendar" class="h-[13px] w-[13px]" style="color: #f2404f" />
-            <View class="w-[160px]"><TextInput class="h-[22px] text-[13px]" :value="dStart()" placeholder="2026-11-04 or tomorrow" @input="editTodo('start', $event)" @submit="flushTodo()" @blur="flushTodo()" testID="detail-start" /></View>
+            <View class="w-[200px]"><TextInput class="h-[22px] text-[13px]" :bordered="false" :value="dStart()" placeholder="2026-11-04 or tomorrow" @input="editTodo('start', $event)" @submit="flushTodo()" @blur="flushTodo()" testID="detail-start" /></View>
           </View>
           <View :if="showDeadline()" class="flex-row gap-[8px] items-center pl-[19px] h-[26px]">
             <Icon symbol="flag.fill" class="h-[12px] w-[12px]" style="color: #e5484d" />
             <Text class="text-[13px]" style="color: secondaryLabel" :text="'Deadline'" />
-            <View class="w-[160px]"><TextInput class="h-[22px] text-[13px]" :value="dDeadline()" placeholder="2026-11-20" @input="editTodo('deadline', $event)" @submit="flushTodo()" @blur="flushTodo()" testID="detail-deadline" /></View>
+            <View class="w-[200px]"><TextInput class="h-[22px] text-[13px]" :bordered="false" :value="dDeadline()" placeholder="2026-11-20" @input="editTodo('deadline', $event)" @submit="flushTodo()" @blur="flushTodo()" testID="detail-deadline" /></View>
           </View>
           <View :if="showTags()" class="flex-row gap-[8px] items-center pl-[19px] h-[26px]">
             <Icon symbol="tag" class="h-[12px] w-[12px]" style="color: secondaryLabel" />
-            <View class="flex-1"><TextInput class="h-[22px] text-[13px]" :value="dTags()" placeholder="Tags, separated by commas" @input="editTodo('tags', $event)" @submit="flushTodo()" @blur="flushTodo()" testID="detail-tags" /></View>
+            <View class="flex-1"><TextInput class="h-[22px] text-[13px]" :bordered="false" :value="dTags()" placeholder="Tags, separated by commas" @input="editTodo('tags', $event)" @submit="flushTodo()" @blur="flushTodo()" testID="detail-tags" /></View>
           </View>
           <Text :if="dHint()" class="pl-[19px] text-[11.5px]" style="color: secondaryLabel" :text="dHint()" testID="detail-hint" />
           <View class="flex-row gap-[2px] items-center pl-[13px] pt-[8px]">
@@ -1281,7 +1282,7 @@ onMount(async () => {
     </View>
     <ScrollView class="flex-1" testID="prompt-list">
       <View class="flex-col gap-[1px] pb-[12px] px-[8px]">
-        <LibraryMacListRow :for="prompt in shownPrompts()" :key="prompt.id" :rowId="'prompt-' + prompt.id" :title="prompt.title" :subtitle="prompt.description || prompt.body" :meta="prompt.uses ? (prompt.uses === 1 ? '1 use' : prompt.uses + ' uses') : ''" :symbol="prompt.favorite ? 'star.fill' : ''" :selected="prompt.id === promptId()" :fill="colors().selection" @choose="choosePrompt(prompt)" @menu="promptMenu(prompt)" />
+        <NotesMacListRow :for="prompt in shownPrompts()" :key="prompt.id" :rowId="'prompt-' + prompt.id" :title="prompt.title" :subtitle="prompt.description || prompt.body" :meta="prompt.uses ? (prompt.uses === 1 ? '1 use' : prompt.uses + ' uses') : ''" :symbol="prompt.favorite ? 'star.fill' : ''" :selected="prompt.id === promptId()" :fill="colors().selection" @choose="choosePrompt(prompt)" @menu="promptMenu(prompt)" />
         <Text :if="!shownPrompts().length" class="p-[16px] text-[12.5px]" style="color: secondaryLabel" :text="search() ? 'No prompts match.' : 'No prompts in this library yet.'" testID="prompts-empty" />
       </View>
     </ScrollView>

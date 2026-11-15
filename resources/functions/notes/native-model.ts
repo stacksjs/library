@@ -5,7 +5,7 @@
  * projects in Anytime), what each row shows, how Notes groups its list by
  * date, prompt variables, note check lines and formatting, inline completion
  * text, and the offline cache's keys and limits. Nothing here touches Craft,
- * so all of it runs under `bun test`; `native-library.ts` is the part that does.
+ * so all of it runs under `bun test`; `native-app.ts` is the part that does.
  */
 import { addDays } from '../../../app/Support/dates'
 import type { SmartList } from '../../../app/Support/lists'
@@ -603,7 +603,7 @@ export type CacheName = 'sidebar' | 'libraries' | 'todos' | 'notes' | 'trash' | 
 
 /** Saved data is per account, so a second person signing in on the Mac never sees the first one's lists. */
 export function cacheKey(account: number | string, name: CacheName): string {
-  return `library.cache.${account}.${name}`
+  return `notes.cache.${account}.${name}`
 }
 
 /** The most rows of each kind the cache keeps; UserDefaults is not a database. */

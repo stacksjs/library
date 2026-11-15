@@ -1,16 +1,16 @@
 /**
- * Fills a running Library server with a believable account, for screenshots,
+ * Fills a running Notes server with a believable account, for screenshots,
  * reviewers and local development:
  *
  *   bun scripts/seed-demo.ts [http://127.0.0.1:3408]
  *
- * Signs in as demo@library.test (creating it on first run) and adds areas,
+ * Signs in as demo@notes.test (creating it on first run) and adds areas,
  * projects, to-dos, notes and a shared prompt library. Safe to run twice: it
  * does nothing when the account already has to-dos.
  */
 const base = process.argv[2] ?? 'http://127.0.0.1:3408'
-const email = process.env.DEMO_EMAIL ?? 'demo@library.test'
-const password = process.env.DEMO_PASSWORD ?? 'library-demo-account-1'
+const email = process.env.DEMO_EMAIL ?? 'demo@notes.test'
+const password = process.env.DEMO_PASSWORD ?? 'notes-demo-account-1'
 
 let token = ''
 let csrf = ''

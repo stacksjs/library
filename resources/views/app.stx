@@ -1,11 +1,11 @@
 @extends('shell')
 @section('content')
 <script server>
-useHead({ title: 'Library' })
+useHead({ title: 'Notes' })
 </script>
 <script client>
-  import { commandFor } from '../functions/library/shortcuts'
-  import { focusField, isWide, scrollCursorIntoView } from '../functions/library/client'
+  import { commandFor } from '../functions/notes/shortcuts'
+  import { focusField, isWide, scrollCursorIntoView } from '../functions/notes/client'
 
   const session = useStore('account')
   const ws = useStore('workspace')

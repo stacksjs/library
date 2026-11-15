@@ -1,5 +1,5 @@
 <script client>
-  import { focusField } from '../functions/library/client'
+  import { focusField } from '../functions/notes/client'
   const tpWs = useStore('workspace')
   const tpTasks = useStore('tasks')
   const tpName = state('')

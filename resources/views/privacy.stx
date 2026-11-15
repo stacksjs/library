@@ -1,14 +1,14 @@
 @extends('shell')
 @section('content')
 <script server>
-useHead({ title: 'Privacy Policy - Library' })
+useHead({ title: 'Privacy Policy - Notes' })
 </script>
 <main class="k-doc" style="max-width: 720px; margin: 0 auto; padding: 48px 20px 96px; line-height: 1.6">
-  <p><a href="/" style="color: var(--accent-text); font-weight: 600">Library</a></p>
+  <p><a href="/" style="color: var(--accent-text); font-weight: 600">Notes</a></p>
   <h1 style="font-size: 32px; letter-spacing: -.02em; margin: 8px 0 4px">Privacy Policy</h1>
   <p class="k-sub">Last updated 1 November 2026</p>
 
-  <p>Library keeps your to-dos, notes and prompt libraries. This page says what it stores about you, why, and how to remove it.</p>
+  <p>Notes keeps your to-dos, notes and prompt libraries. This page says what it stores about you, why, and how to remove it.</p>
 
   <h2>What we collect</h2>
   <ul>
@@ -19,7 +19,7 @@ useHead({ title: 'Privacy Policy - Library' })
   </ul>
 
   <h2>Why</h2>
-  <p>Only to run Library: to sign you in, show your content on every device you use, and let you share a library with the people you choose. We do not sell your data, show ads, or track you across other apps and sites. Library has no third-party analytics.</p>
+  <p>Only to run Notes: to sign you in, show your content on every device you use, and let you share a library with the people you choose. We do not sell your data, show ads, or track you across other apps and sites. Notes has no third-party analytics.</p>
 
   <h2>Who can see it</h2>
   <p>Only you, and the people you share a library or link with. The service runs on our own server at a hosting provider in the European Union. When the optional writing suggestions are available, the text around your cursor is sent to the AI model provider that produces the suggestion, and nothing else is.</p>
@@ -28,7 +28,7 @@ useHead({ title: 'Privacy Policy - Library' })
   <p>We keep your data until you delete it. You can delete your account at any time from Settings in the Mac app, or on the website at <a href="/delete-account" style="color: var(--accent-text); font-weight: 600">library.stacksjs.com/delete-account</a>. That permanently removes your account, to-dos, notes, prompt libraries and shares from our server. Notes you move to Recently Deleted are removed for good after 30 days.</p>
 
   <h2>Children</h2>
-  <p>Library is not directed at children under 13, and we do not knowingly collect their data.</p>
+  <p>Notes is not directed at children under 13, and we do not knowingly collect their data.</p>
 
   <h2>Changes and contact</h2>
   <p>If this policy changes, the date above changes with it. Questions, or a request we can help with: <a href="/support" style="color: var(--accent-text); font-weight: 600">Support</a>.</p>

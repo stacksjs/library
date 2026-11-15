@@ -4,7 +4,7 @@
  * Screens import from here and from `native-model.ts`; nothing here is used
  * by the web app.
  */
-import type { NativeCraft, NativeDesktop } from '@stacksjs/stx/native'
+import type { NativeCraft, NativeDesktop, NativeUpdater, NativeUpdateStatus } from '@stacksjs/stx/native'
 import { createApi, type LibraryApi, type Session } from './api'
 import { capForCache, cacheKey, cleanCompletion, type CacheName, type CompletionKind } from './native-model'
 
@@ -14,8 +14,31 @@ export function nativeCraft(): NativeCraft {
 
 export function desktop(): NativeDesktop {
   const value = nativeCraft().desktop
-  if (!value) throw new Error('Library for Mac needs the Craft AppKit host.')
+  if (!value) throw new Error('Notes for Mac needs the Craft AppKit host.')
   return value
+}
+
+/** What Settings shows before the updater has answered, and for a host with no updater at all (a Mac App Store build). */
+export function updaterStatus(): NativeUpdateStatus {
+  return { currentVersion: nativeCraft().app.version || '', state: 'unavailable', selfUpdating: false }
+}
+
+/**
+ * The app's updater. A copy that updates itself (the direct download) checks a
+ * signed feed and replaces its own bundle; a Mac App Store copy has no updater,
+ * and every call answers `unavailable` so the screen has one path.
+ */
+export function updater(): NativeUpdater {
+  const real = nativeCraft().updater
+  if (real) return real
+  const none = async (): Promise<NativeUpdateStatus> => updaterStatus()
+  return { status: none, check: none, install: none, relaunch: async () => {}, onChange: () => () => {} }
+}
+
+/** Open a web page in the browser. */
+export function openWeb(url: string): void {
+  const craft = nativeCraft()
+  void (craft.linking?.openURL ?? craft.openURL)?.(url)
 }
 
 /** Where the Keychain item lives; it is also Craft's session key, so every window hears sign-in and sign-out. */
@@ -57,27 +80,18 @@ export function nativeUrl(base: string, input: string): string {
 }
 
 /**
- * Requests as the native host sends them. A post made before sign-in (sign
- * in, create account) carries a CSRF token, which `createApi` reads once and
- * keeps. The host's cookie jar takes every CSRF cookie the server hands out
- * (signing out rotates it), and the server only mints one for a request that
- * has none, so after a sign-out the saved token no longer matches the cookie
- * the jar sends and the server answers 403. The latest token any response
- * set is remembered and used for such posts instead.
+ * Requests as the native host sends them: without the host's cookie store.
+ *
+ * The Mac app is a bearer-token client, and the only cookie it ever needs is
+ * the CSRF one for a post made before sign-in (sign in, create account), which
+ * `createApi` sets itself beside the matching header. The host's windows share
+ * one cookie store, so with it in play a sign-out in Settings rotated the
+ * cookie under the main window, whose next sign-in sent its own token beside
+ * the other window's cookie and was refused. `credentials: 'omit'` keeps the
+ * store out of every request.
  */
-let latestCsrf = ''
-
 async function nativeFetch(base: string, input: string, init?: RequestInit): Promise<Response> {
-  const headers = { ...(init?.headers as Record<string, string> | undefined) }
-  const method = String(init?.method ?? 'GET').toUpperCase()
-  if (method !== 'GET' && latestCsrf && headers['x-csrf-token'] && !headers.authorization) {
-    headers['x-csrf-token'] = latestCsrf
-    headers.cookie = `X-CSRF-Token=${latestCsrf}`
-  }
-  const response = await fetch(nativeUrl(base, input), { ...init, headers })
-  const minted = /X-CSRF-Token=([0-9a-f]+)/.exec(response.headers.get('set-cookie') ?? '')?.[1]
-  if (minted) latestCsrf = minted
-  return response
+  return fetch(nativeUrl(base, input), { ...init, credentials: 'omit' })
 }
 
 /** The API client against the server the app was built for (`craft.app.url`). */
@@ -121,7 +135,7 @@ export function apiOrigin(): string {
 
 export interface Account { id: number, email: string, name: string }
 
-const ACCOUNT_KEY = 'library.account'
+const ACCOUNT_KEY = 'notes.account'
 
 export function savedAccount(): Account | null {
   try {
@@ -162,7 +176,8 @@ export function palette(scheme: 'light' | 'dark') {
     hairline: dark ? '#38383a' : '#e5e5ea',
     checkbox: dark ? '#636366' : '#c7c7cc',
     selection: dark ? '#2f3b4d' : '#e3ebf9',
-    noteSelection: dark ? '#5a4a1c' : '#fbe6a2',
+    // The selected note is a quiet grey, as in Notes on macOS 26; the list's own blue is for prompts.
+    noteSelection: dark ? '#3a3a3d' : '#e4e4e7',
     hover: dark ? '#2a2a2c' : '#f2f2f4',
     field: dark ? '#2c2c2e' : '#ffffff',
     muted: dark ? '#98989d' : '#6e6e73',

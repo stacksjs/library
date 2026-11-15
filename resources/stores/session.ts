@@ -1,10 +1,10 @@
 import { defineStore, state } from '@stacksjs/stx'
-import { api, go, safeNext, session } from '../functions/library/client'
-import { ApiError } from '../functions/library/api'
+import { api, go, safeNext, session } from '../functions/notes/client'
+import { ApiError } from '../functions/notes/api'
 
 interface User { id: number, email: string, name: string }
 
-/** Who is signed in, and the sign-in, sign-up and sign-out flows. The token itself lives in `functions/library/session.ts`. */
+/** Who is signed in, and the sign-in, sign-up and sign-out flows. The token itself lives in `functions/notes/session.ts`. */
 defineStore('account', () => {
   const user = state<User | null>(null)
   const ready = state(false)
@@ -29,7 +29,7 @@ defineStore('account', () => {
     try { user.set(await api.me()) }
     catch (cause) {
       // A 401 already cleared the token and redirected; anything else (offline) keeps the page.
-      if (!(cause instanceof ApiError && cause.status === 401)) error.set('Could not reach Library. Check your connection.')
+      if (!(cause instanceof ApiError && cause.status === 401)) error.set('Could not reach Notes. Check your connection.')
       ready.set(true)
       return !!user()
     }

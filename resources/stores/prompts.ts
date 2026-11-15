@@ -1,8 +1,8 @@
 import { defineStore, derived, state, useStore } from '@stacksjs/stx'
 import { fillPrompt, promptVariables } from '../../app/Support/prompts'
-import { api, copyText, origin } from '../functions/library/client'
-import { filledSegments, filterPrompts, normalizePrompt, publicLinkUrl } from '../functions/library/promptview'
-import type { Library, Prompt, PromptVersion, Share } from '../functions/library/types'
+import { api, copyText, origin } from '../functions/notes/client'
+import { filledSegments, filterPrompts, normalizePrompt, publicLinkUrl } from '../functions/notes/promptview'
+import type { Library, Prompt, PromptVersion, Share } from '../functions/notes/types'
 
 export interface Draft { id: number, title: string, description: string, body: string, model: string, tags: string[], favorite: boolean }
 

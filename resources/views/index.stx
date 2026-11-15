@@ -2,12 +2,12 @@
 @section('content')
 <script server>
 useHead({
-  title: 'Library: to-dos, notes and shareable prompts',
-  meta: [{ name: 'description', content: 'Library is an open source home for your to-dos, your notes and the prompts you reuse.' }],
+  title: 'Notes: notes, to-dos and shareable prompts',
+  meta: [{ name: 'description', content: 'Notes is an open source home for your notes, your to-dos and the prompts you reuse.' }],
 })
 </script>
 <script client>
-  import { session, go } from '../functions/library/client'
+  import { session, go } from '../functions/notes/client'
   // Someone who is already signed in has no use for the welcome page.
   onMount(() => { if (session.token()) go('/app') })
 </script>
@@ -15,8 +15,8 @@ useHead({
 <main class="k-auth">
   <div class="k-auth-card" style="max-width: 440px">
     <span class="k-mark" aria-hidden="true"><i class="i-hugeicons-checkmark-circle-02 k-ico k-ico-lg"></i></span>
-    <h1>Library</h1>
-    <p style="margin: 0 0 24px; font-size: 17px; color: var(--text-2)">To-dos, notes and the prompts you reuse, in one calm place. Open source, and yours to keep.</p>
+    <h1>Notes</h1>
+    <p style="margin: 0 0 24px; font-size: 17px; color: var(--text-2)">Notes, to-dos and the prompts you reuse, in one calm place. Open source, and yours to keep.</p>
     <div style="display: flex; gap: 10px; flex-wrap: wrap">
       <a class="k-btn k-btn-primary" style="min-height: 44px; padding: 0 22px" href="/register">Create account</a>
       <a class="k-btn" style="min-height: 44px; padding: 0 22px" href="/login">Sign in</a>

@@ -1,6 +1,6 @@
-# Library
+# Notes
 
-A [Stacks](https://stacksjs.com) application.
+Notes, to-dos and shareable prompts in one calm place: a web app and a native Mac app, built on [Stacks](https://stacksjs.com).
 
 ## Getting started
 

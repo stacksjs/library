@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { acceptCompletion, acceptCompletionAt, appendCheckLine, ghostAt, cacheKey, capForCache, checkLines, cleanCompletion, completionRequest, eventText, eventValue, fillPrompt, findLibrary, formatNote, isOfflineError, navId, navTitle, noteDateGroups, noteSnippet, noteStamp, noteTagCounts, noteTagList, notesIn, parseDayField, parseNav, progressSymbol, projectProgress, splitBlocks, blockHeader, promptVariables, quickEntry, resolveDay, rowMarks, shareLink, sidebarSections, todoBlocks, toggleChecklist, unfilled, whenChip } from '../../resources/functions/library/native-model'
-import type { LibraryList, Note, SidebarData, Todo } from '../../resources/functions/library/types'
+import { acceptCompletion, acceptCompletionAt, appendCheckLine, ghostAt, cacheKey, capForCache, checkLines, cleanCompletion, completionRequest, eventText, eventValue, fillPrompt, findLibrary, formatNote, isOfflineError, navId, navTitle, noteDateGroups, noteSnippet, noteStamp, noteTagCounts, noteTagList, notesIn, parseDayField, parseNav, progressSymbol, projectProgress, splitBlocks, blockHeader, promptVariables, quickEntry, resolveDay, rowMarks, shareLink, sidebarSections, todoBlocks, toggleChecklist, unfilled, whenChip } from '../../resources/functions/notes/native-model'
+import type { LibraryList, Note, SidebarData, Todo } from '../../resources/functions/notes/types'
 
 const today = '2026-10-30'
 let next = 1
@@ -293,8 +293,8 @@ describe('native completions', () => {
 
 describe('native offline cache', () => {
   it('keys saved data by account', () => {
-    expect(cacheKey(11, 'todos')).toBe('library.cache.11.todos')
-    expect(cacheKey(11, 'prompts.4')).toBe('library.cache.11.prompts.4')
+    expect(cacheKey(11, 'todos')).toBe('notes.cache.11.todos')
+    expect(cacheKey(11, 'prompts.4')).toBe('notes.cache.11.prompts.4')
   })
 
   it('caps what it keeps', () => {

@@ -25,7 +25,7 @@
     "3000": { "label": "Frontend", "onAutoForward": "notify" },
     "3001": { "label": "Backend" },
     "3002": { "label": "Admin" },
-    "3003": { "label": "Library" },
+    "3003": { "label": "Component library" },
     "3006": { "label": "Docs" },
     "3007": { "label": "Inspect" },
     "3008": { "label": "API" }

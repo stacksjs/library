@@ -1,7 +1,7 @@
 @extends('shell')
 @section('content')
 <script server>
-useHead({ title: 'Create a Library account' })
+useHead({ title: 'Create a Notes account' })
 </script>
 <AuthForm mode="signup" />
 @endsection

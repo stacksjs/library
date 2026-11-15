@@ -2,13 +2,17 @@ import type { CloudConfig } from '@stacksjs/types'
 import type { CloudConfig as TsCloudConfig } from '@stacksjs/ts-cloud'
 import { env } from '@stacksjs/env'
 
+// The app was called Library when this tenant was created. Its slug, its
+// domain and `/var/lib/library` name files, a certificate and a database that
+// exist on the box, so they keep that name: changing one here would start an
+// empty tenant beside the live one instead of renaming it.
 const APP_SLUG = 'library'
 const APP_DOMAIN = env.APP_DOMAIN || 'library.stacksjs.com'
 
 /**
  * Cloud configuration.
  *
- * Library is a TENANT on the shared Hetzner box the `stacks` project owns
+ * Notes is a TENANT on the shared Hetzner box the `stacks` project owns
  * (`cloud.attachTo`), not a box of its own. Two rules follow, and both have
  * caused outages on that box before:
  *
@@ -64,7 +68,7 @@ export const tsCloud: TsCloudConfig = {
      * No `cdn` block, on purpose. Cloudflare settings and cache rules are
      * ZONE-WIDE, and a tenant that declares them rewrites every other tenant's
      * (one tenant's deploy replaced all the `[ts-cloud]` cache rules on this
-     * zone). Library is served straight from the box over its own certificate.
+     * zone). Notes is served straight from the box over its own certificate.
      * `records` stays empty for the same reason: the zone's mail, DKIM and
      * validation records belong to the zone owner.
      */
@@ -117,7 +121,7 @@ export const tsCloud: TsCloudConfig = {
         HOST: '127.0.0.1',
         APP_ENV: 'production',
         NODE_ENV: 'production',
-        APP_NAME: 'Library',
+        APP_NAME: 'Notes',
         APP_URL: APP_DOMAIN,
         APP_KEY: env.APP_KEY || '',
         PORT_API: '3258',
@@ -150,7 +154,7 @@ export const tsCloud: TsCloudConfig = {
         HOST: '127.0.0.1',
         APP_ENV: 'production',
         NODE_ENV: 'production',
-        APP_NAME: 'Library',
+        APP_NAME: 'Notes',
         APP_URL: APP_DOMAIN,
         APP_KEY: env.APP_KEY || '',
         STACKS_DEFAULT_ROUTES: 'auth',
