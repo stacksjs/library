@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Pantry
-        uses: pantry-pm/pantry/packages/action@cdb82193cb344c2b881a88ea79f88243f5522e0f # v0.11.75
+        uses: pantry-pm/pantry/packages/action@928ffb853b15f57a0fe30521207f8cc6f365362f # v0.11.209
         with:
           install: 'false'
 
@@ -63,7 +63,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Pantry
-        uses: pantry-pm/pantry/packages/action@cdb82193cb344c2b881a88ea79f88243f5522e0f # v0.11.75
+        uses: pantry-pm/pantry/packages/action@928ffb853b15f57a0fe30521207f8cc6f365362f # v0.11.209
         with:
           install: 'false'
 
@@ -104,7 +104,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Pantry
-        uses: pantry-pm/pantry/packages/action@cdb82193cb344c2b881a88ea79f88243f5522e0f # v0.11.75
+        uses: pantry-pm/pantry/packages/action@928ffb853b15f57a0fe30521207f8cc6f365362f # v0.11.209
         with:
           install: 'false'
 
