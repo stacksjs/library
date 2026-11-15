@@ -231,6 +231,23 @@ const envSchema = defineEnv({
     default: false,
   },
 
+  // The file storage bucket (config/filesystems.ts). Hetzner Object Storage has
+  // its own keys, kept apart from the AWS ones other services read.
+  HETZNER_S3_ACCESS_KEY: {
+    validation: schema.string(),
+    default: '',
+  },
+
+  HETZNER_S3_SECRET_KEY: {
+    validation: schema.string(),
+    default: '',
+  },
+
+  AWS_S3_REGION: {
+    validation: schema.string(),
+    default: '',
+  },
+
   AWS_ACCOUNT_ID: {
     validation: schema.string(),
     default: '',

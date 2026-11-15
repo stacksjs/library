@@ -10,6 +10,9 @@ import { env } from '@stacksjs/env'
  *
  * @see https://stacksjs.com/docs/filesystems
  */
+const s3Key = env.HETZNER_S3_ACCESS_KEY || env.AWS_ACCESS_KEY_ID
+const s3Secret = env.HETZNER_S3_SECRET_KEY || env.AWS_SECRET_ACCESS_KEY
+
 export default {
   /**
    * Which disk `Storage.disk()` returns when called with no name.
@@ -38,17 +41,15 @@ export default {
    */
   s3: {
     bucket: env.AWS_S3_BUCKET || '',
-    region: env.AWS_REGION || 'us-east-1',
+    region: env.AWS_S3_REGION || env.AWS_REGION || 'us-east-1',
     prefix: env.AWS_S3_PREFIX || '',
-    credentials: env.AWS_ACCESS_KEY_ID && env.AWS_SECRET_ACCESS_KEY
-      ? {
-          accessKeyId: env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-        }
-      : undefined,
+    // The bucket's own keys. Hetzner Object Storage keys go in HETZNER_S3_*, so
+    // they are never offered to the AWS services that read AWS_ACCESS_KEY_ID.
+    credentials: s3Key && s3Secret ? { accessKeyId: s3Key, secretAccessKey: s3Secret } : undefined,
     // For S3-compatible services. Setting this turns on path-style addressing
     // (`host/bucket/key`) by default, which Hetzner and MinIO require.
-    // endpoint: 'https://s3-compatible-service.com',
+    // Unset means AWS itself.
+    endpoint: env.AWS_ENDPOINT || undefined,
 
     // Filebase, Cloudflare R2 and Google Cloud Storage serve virtual-hosted
     // style instead, so they need this off. `filebaseDisk()`, `r2Disk()` and
