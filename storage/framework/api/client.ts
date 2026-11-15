@@ -914,6 +914,20 @@ export function createClient(config: ClientConfig) {
   },
 
   /**
+   * GET /api/updates/files/{channel}/{target}/{version}/{file}
+   */
+  getUpdatesFilesChannelTargetVersionFile(input: { "channel": string; "target": string; "version": string; "file": string }, options?: RequestOptions): Promise<ApiResult<Record<string, unknown>>> {
+    return request(config, "GET", "/api/updates/files/{channel}/{target}/{version}/{file}", input ?? {}, [{"name":"channel","in":"path","required":true},{"name":"target","in":"path","required":true},{"name":"version","in":"path","required":true},{"name":"file","in":"path","required":true}], null, "application/json", [], options)
+  },
+
+  /**
+   * GET /api/updates/{platform}/{arch}
+   */
+  getUpdatesPlatformArch(input: { "platform": string; "arch": string }, options?: RequestOptions): Promise<ApiResult<Record<string, unknown>>> {
+    return request(config, "GET", "/api/updates/{platform}/{arch}", input ?? {}, [{"name":"platform","in":"path","required":true},{"name":"arch","in":"path","required":true}], null, "application/json", [], options)
+  },
+
+  /**
    * GET /api/users
    */
   getUsers(options?: RequestOptions): Promise<ApiResult<{ "data": Array<{ "id": number; "uuid": string; "name"?: string; "email"?: string; "avatar"?: string; "created_at"?: string; "updated_at"?: string }> }>> {

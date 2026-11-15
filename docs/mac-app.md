@@ -55,9 +55,11 @@ What a release needs, all read from the environment (`APP_ENV=production` loads
 | Update signing key | `DESKTOP_UPDATE_PRIVATE_KEY` | in `.env.production` |
 | A storage disk the release machine and the server share | `STORAGE_DRIVER=s3` and its `AWS_S3_*` settings | not set up: the app only has the local disk, so a release made on a Mac cannot reach the server's |
 
-Rehearsed on 2026-11-14 with a dry-run release served from a local feed: a
-Developer ID build at 0.0.0 found 0.0.1, verified and installed it, restarted,
-and reported 0.0.1. Notarization and a published release have not been run.
+Rehearsed on 2026-11-15 on the published Stacks 0.75.598, Craft 0.0.505 and stx
+0.2.893, with a dry-run release served from a local feed: a Developer ID build at
+0.0.0 found 0.0.1, verified and installed it, restarted, and reported 0.0.1.
+Notarization and a published release have not been run. Until a first release is
+published the feed answers 404, which the app reports as a failed check.
 
 ## Mac App Store
 
