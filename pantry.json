@@ -1,0 +1,8 @@
+{
+  "native": {
+    "environment": "production",
+    "build": ["./buddy", "release:desktop", "--package-only"],
+    "macos": { "notarize": true },
+    "registry": { "domain": "github.com/stacksjs/library" }
+  }
+}
