@@ -62,6 +62,9 @@ declare global {
   const requestCompletion: typeof autoImports.requestCompletion
   const nativeCraft: typeof autoImports.nativeCraft
   const desktop: typeof autoImports.desktop
+  const updaterStatus: typeof autoImports.updaterStatus
+  const updater: typeof autoImports.updater
+  const openWeb: typeof autoImports.openWeb
   const keychainSession: typeof autoImports.keychainSession
   const nativeUrl: typeof autoImports.nativeUrl
   const nativeApi: typeof autoImports.nativeApi
