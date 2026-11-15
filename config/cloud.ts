@@ -10,6 +10,20 @@ const APP_SLUG = 'library'
 const APP_DOMAIN = env.APP_DOMAIN || 'library.stacksjs.com'
 
 /**
+ * Where files are kept: the bucket the Mac release publishes update files to
+ * and the server's update feed reads them from. Both sites get it, because
+ * either may be asked for a file. Empty values leave the local disk in place.
+ */
+const STORAGE_ENV = {
+  STORAGE_DRIVER: env.STORAGE_DRIVER || 'local',
+  AWS_S3_BUCKET: env.AWS_S3_BUCKET || '',
+  AWS_S3_REGION: env.AWS_S3_REGION || '',
+  AWS_ENDPOINT: env.AWS_ENDPOINT || '',
+  HETZNER_S3_ACCESS_KEY: env.HETZNER_S3_ACCESS_KEY || '',
+  HETZNER_S3_SECRET_KEY: env.HETZNER_S3_SECRET_KEY || '',
+}
+
+/**
  * Cloud configuration.
  *
  * Notes is a TENANT on the shared Hetzner box the `stacks` project owns
@@ -139,6 +153,7 @@ export const tsCloud: TsCloudConfig = {
         // No mail server is configured yet: write the welcome email to the log
         // instead of failing a connection to a local SMTP port on every signup.
         MAIL_MAILER: 'log',
+        ...STORAGE_ENV,
       },
     },
 
@@ -163,6 +178,7 @@ export const tsCloud: TsCloudConfig = {
         DB_DATABASE_PATH: '/var/lib/library/library.sqlite',
         DB_SNAPSHOT_PATH: '/var/lib/library/db-snapshot',
         MAIL_MAILER: 'log',
+        ...STORAGE_ENV,
       },
     },
   },
