@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "stacks",
+      "name": "notes",
       "dependencies": {
         "@iconify-json/f7": "1.2.2",
         "@iconify-json/hugeicons": "1.2.35",
